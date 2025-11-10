@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_build_context_synchronously
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:application_library/ui/core/routes/app_router.gr.dart';
@@ -56,7 +58,7 @@ class PantallaPrincipal extends StatelessWidget {
 
                 if (context.mounted) {
                   Navigator.pop(context);
-                  context.router.push(const PantallaInicioSesion());
+                  context.router.push(const RouteInicioSesion());
 
                 }
               }
@@ -125,14 +127,15 @@ class _SideBarMenu extends StatelessWidget {
             collapsedTextColor: Colors.white,
             children: [
               ListTile(
-                title: const Text('Listado', style: TextStyle(color: Colors.black)),
+                title: const Text('Listado', style: TextStyle(color: Color.fromARGB(255, 190, 190, 190))),
                 onTap: () {
+                  AutoRouter.of(context).push(const RouteProducto());
                 },
                 hoverColor: const Color(0xFF2c3e50),
                 tileColor: Colors.white,
               ),
               ListTile(
-                title: const Text('Agregar producto', style: TextStyle(color: Colors.black)),
+                title: const Text('Agregar producto', style: TextStyle(color: Color.fromARGB(255, 190, 190, 190))),
                 onTap: () {
                 },
                 hoverColor: const Color(0xFF2c3e50),
@@ -141,8 +144,42 @@ class _SideBarMenu extends StatelessWidget {
             ],
           ),
 
+          // ExpansionTile(
+          //   title: const Text('Categorías', style: TextStyle(color: Colors.white)),
+          //   backgroundColor: const Color(0xFF2c3e50),
+          //   collapsedBackgroundColor: const Color(0xFF2c3e50),
+          //   textColor: Colors.white,
+          //   iconColor: Colors.white,
+          //   collapsedTextColor: Colors.white,
+          //   children: [
+          //     ListTile(
+          //       title: const Text('Listado', style: TextStyle(color: Colors.black)),
+          //       onTap: () {
+          //         //AutoRouter.of(context).push(const RutaCategoriesPage());
+          //       },
+          //       hoverColor: const Color(0xFF2c3e50),
+          //       tileColor: Colors.white,
+          //     ),
+          //     ListTile(
+          //       title: const Text('Agregar categoría', style: TextStyle(color: Colors.black)),
+          //       onTap: () {
+          //         //AutoRouter.of(context).push(const RutaCategoriesPage());
+          //       },
+          //       hoverColor: const Color(0xFF2c3e50),
+          //       tileColor: Colors.white,
+          //     ),
+          //   ],
+          // ),
+
+          // ListTile(
+          //   title: const Text('Proveedores', style: TextStyle(color: Colors.white)),
+          //   onTap: () {
+          //     AutoRouter.of(context).push(const ProveedorPantalla());
+          //   },
+          //   hoverColor: const Color(0xFF2c3e50),
+          // ),
           ExpansionTile(
-            title: const Text('Categorías', style: TextStyle(color: Colors.white)),
+            title: const Text('Proveedores', style: TextStyle(color: Colors.white)),
             backgroundColor: const Color(0xFF2c3e50),
             collapsedBackgroundColor: const Color(0xFF2c3e50),
             textColor: Colors.white,
@@ -150,43 +187,35 @@ class _SideBarMenu extends StatelessWidget {
             collapsedTextColor: Colors.white,
             children: [
               ListTile(
-                title: const Text('Listado', style: TextStyle(color: Colors.black)),
+                title: const Text('Listado', style: TextStyle(color: Color.fromARGB(255, 190, 190, 190))),
                 onTap: () {
-                  //AutoRouter.of(context).push(const RutaCategoriesPage());
+                  AutoRouter.of(context).push(const RouteProveedor());
                 },
                 hoverColor: const Color(0xFF2c3e50),
                 tileColor: Colors.white,
               ),
               ListTile(
-                title: const Text('Agregar categoría', style: TextStyle(color: Colors.black)),
+                title: const Text('Agregar proveedor', style: TextStyle(color: Color.fromARGB(255, 190, 190, 190))),
                 onTap: () {
-                  //AutoRouter.of(context).push(const RutaCategoriesPage());
                 },
                 hoverColor: const Color(0xFF2c3e50),
                 tileColor: Colors.white,
               ),
             ],
           ),
-
-          ListTile(
-            title: const Text('Proveedores', style: TextStyle(color: Colors.white)),
-            onTap: () {
-            },
-            hoverColor: const Color(0xFF2c3e50),
-          ),
-          ListTile(
-            title: const Text('Clientes', style: TextStyle(color: Colors.white)),
-            onTap: () {
-            },
-            hoverColor: const Color(0xFF2c3e50),
-          ),
-          ListTile(
-            title: const Text('Marcas', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              //AutoRouter.of(context).push(const RutaBrandsPage());
-            },
-            hoverColor: const Color(0xFF2c3e50),
-          ),
+          // ListTile(
+          //   title: const Text('Clientes', style: TextStyle(color: Colors.white)),
+          //   onTap: () {
+          //   },
+          //   hoverColor: const Color(0xFF2c3e50),
+          // ),
+          // ListTile(
+          //   title: const Text('Marcas', style: TextStyle(color: Colors.white)),
+          //   onTap: () {
+          //     //AutoRouter.of(context).push(const e());
+          //   },
+          //   hoverColor: const Color(0xFF2c3e50),
+          // ),
         ],
       ),
     );
