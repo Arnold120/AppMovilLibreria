@@ -13,23 +13,52 @@ class CategoriaPantalla extends StatefulWidget {
 }
 
 class _CategoriaPantallaState extends State<CategoriaPantalla> {
-  late final CategoriaController controller;
+  late final CategoriaController _controller;
+  final _searchCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    controller = CategoriaController();
-    controller.load();
+    _controller = CategoriaController();
+    _controller.load();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _searchCtrl.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  void _onBuscar(String q) => _controller.filter(q);
+
+  void _mostrarDetalle(Categoria c) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(c.nombreCategoria),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _kv('Código', '${c.categoriaId}'),
+            _kv('Activo', c.activo ? 'Sí' : 'No'),
+            _kv('Registro', c.fechaRegistro.toLocal().toString().split(' ').first),
+            const SizedBox(height: 8),
+            const Text('Descripción', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
+            Text(c.descripcion.isEmpty ? 'Sin descripción' : c.descripcion),
+          ],
+        ),
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cerrar'))],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 430;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6FB),
       appBar: AppBar(
@@ -38,138 +67,163 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+              colors: [Color.fromARGB(255, 28, 82, 229), Color.fromARGB(255, 25, 59, 195)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            boxShadow: [
-              BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
-            ],
           ),
         ),
         title: const Text(
           'Gestión de Categorías',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1.1,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.1),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => AutoRouter.of(context).maybePop(),
         ),
       ),
-
       body: AnimatedBuilder(
-        animation: controller,
+        animation: _controller,
         builder: (context, _) {
-          if (controller.loading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF4A00E0)),
+          if (_controller.loading) {
+            return const Center(child: CircularProgressIndicator(color: Color(0xFF4A00E0)));
+          }
+          if (_controller.error != null) {
+            return Center(
+              child: Text('Error al cargar categorías: ${_controller.error}',
+                  style: const TextStyle(color: Colors.redAccent)),
             );
           }
 
-          if (controller.error != null) {
-            return Center(
-              child: Text(
-                'Error al cargar categorías: ${controller.error}',
-                style: const TextStyle(color: Colors.redAccent, fontSize: 16),
-              ),
-            );
-          }
+          final categorias = _controller.filtered;
 
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                _SearchBar(onChanged: controller.filter),
-                const SizedBox(height: 16),
-
-                if (controller.filtered.isEmpty)
-                  Expanded(
+                _SearchBar(controller: _searchCtrl, onChanged: _onBuscar),
+                const SizedBox(height: 12),
+                if (categorias.isEmpty)
+                  const Expanded(
                     child: Center(
-                      child: Text(
-                        'No hay categorías registradas.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
+                      child: Text('No hay categorías registradas.', style: TextStyle(color: Colors.grey)),
                     ),
                   )
                 else
                   Expanded(
-                    child: ListView.separated(
-                      itemCount: controller.filtered.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 10),
-                      itemBuilder: (context, index) {
-                        final c = controller.filtered[index];
-                        return Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 10),
-                            leading: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1E5CA9).withValues(alpha: 0.10),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(Icons.sell_rounded, color: Color(0xFF1E5CA9)),
-                            ),
-                            title: Text(
-                              c.nombreCategoria,
-                              style: const TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Text(
-                                c.descripcion.isEmpty ? 'Sin descripción' : c.descripcion,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            trailing: PopupMenuButton<String>(
-                              onSelected: (value) async {
-                                if (value == 'editar') {
-                                  await _editarCategoria(context, c);
-                                } else if (value == 'eliminar') {
-                                  await _eliminarCategoria(context, c);
-                                }
-                              },
-                              itemBuilder: (context) => const [
-                                PopupMenuItem(
-                                  value: 'editar',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit, size: 18),
-                                      SizedBox(width: 8),
-                                      Text('Editar'),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  value: 'eliminar',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete, size: 18),
-                                      SizedBox(width: 8),
-                                      Text('Eliminar'),
-                                    ],
-                                  ),
-                                ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        dataRowMinHeight: 56,
+                        dataRowMaxHeight: 56,
+                        headingRowHeight: 52,
+                        columnSpacing: isMobile ? 12 : 20,
+                        headingRowColor: WidgetStateProperty.all(const Color(0xFF1565C0)),
+                        headingTextStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                        dividerThickness: .5,
+                        columns: isMobile
+                            ? const [
+                                DataColumn(label: Text('Nombre')),
+                                DataColumn(label: Text('Estado')),
+                                DataColumn(label: Text('Acciones')),
+                              ]
+                            : const [
+                                DataColumn(label: Text('Nombre')),
+                                DataColumn(label: Text('Descripción')),
+                                DataColumn(label: Text('Activo')),
+                                DataColumn(label: Text('Registrada')),
+                                DataColumn(label: Text('Acciones')),
                               ],
-                            ),
-                            onTap: () {
-                              // si deseas abrir detalle, aquí
-                            },
-                          ),
-                        );
-                      },
+                        rows: List.generate(categorias.length, (index) {
+                          final c = categorias[index];
+                          final isEven = index.isEven;
+
+                          return DataRow(
+                            color: WidgetStateProperty.resolveWith<Color?>((states) {
+                              if (states.contains(WidgetState.hovered)) {
+                                return const Color(0xFFE3F2FD);
+                              }
+                              return isEven ? Colors.white : const Color(0xFFF7F9FB);
+                            }),
+                            onLongPress: () => _mostrarDetalle(c),
+                            cells: isMobile
+                                ? [
+                                    DataCell(Text(
+                                      c.nombreCategoria.length > 18
+                                          ? '${c.nombreCategoria.substring(0, 18)}...'
+                                          : c.nombreCategoria,
+                                      style: const TextStyle(fontSize: 12),
+                                    )),
+                                    DataCell(Row(
+                                      children: [
+                                        Icon(
+                                          c.activo ? Icons.circle : Icons.circle_outlined,
+                                          color: c.activo ? Colors.green : Colors.redAccent,
+                                          size: 10,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(c.activo ? 'Activo' : 'Inactivo',
+                                            style: const TextStyle(fontSize: 12)),
+                                      ],
+                                    )),
+                                    DataCell(Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit, color: Color(0xFF1E88E5), size: 18),
+                                          onPressed: () async => _editarCategoria(c),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete, color: Color(0xFFE74C3C), size: 18),
+                                          onPressed: () async => _eliminarCategoria(c),
+                                        ),
+                                      ],
+                                    )),
+                                  ]
+                                : [
+                                    DataCell(Text(
+                                      c.nombreCategoria,
+                                      style: const TextStyle(fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
+                                    DataCell(SizedBox(
+                                      width: 260,
+                                      child: Text(
+                                        c.descripcion.isEmpty ? 'Sin descripción' : c.descripcion,
+                                        style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )),
+                                    DataCell(Icon(
+                                      c.activo ? Icons.check_circle : Icons.cancel,
+                                      color: c.activo ? Colors.green : Colors.redAccent,
+                                      size: 18,
+                                    )),
+                                    DataCell(Text(
+                                      c.fechaRegistro.toLocal().toString().split(' ').first,
+                                      style: const TextStyle(fontSize: 12),
+                                    )),
+                                    DataCell(Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit, color: Color(0xFF4A90E2), size: 18),
+                                          onPressed: () async => _editarCategoria(c),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete, color: Color(0xFFE74C3C), size: 18),
+                                          onPressed: () async => _eliminarCategoria(c),
+                                        ),
+                                      ],
+                                    )),
+                                  ],
+                          );
+                        }),
+                      ),
                     ),
                   ),
               ],
@@ -177,41 +231,26 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
           );
         },
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFF27AE60),
         icon: const Icon(Icons.add),
-        label: const Text("Nueva Categoría", style: TextStyle(fontWeight: FontWeight.bold)),
-        onPressed: () => _crearCategoria(context),
+        label: const Text('Nueva Categoría', style: TextStyle(fontWeight: FontWeight.bold)),
+        onPressed: _crearCategoria,
       ),
     );
   }
 
-  Future<void> _crearCategoria(BuildContext context) async {
-    final nueva = await _dialogoCategoria(
-      context,
-      titulo: 'Nueva categoría',
-      categoriaInicial: null,
-    );
+  Future<void> _crearCategoria() async {
+    final nueva = await _dialogoCategoria(titulo: 'Nueva categoría');
     if (!mounted || nueva == null) return;
-
-    final ok = await controller.crear(nueva);
+    final ok = await _controller.crear(nueva);
     if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Categoría creada' : 'No se pudo crear'),
-        backgroundColor: ok ? Colors.green : Colors.redAccent,
-      ),
-    );
+    _toast(ok ? 'Categoría creada' : 'No se pudo crear', ok);
   }
 
-  Future<void> _editarCategoria(BuildContext context, Categoria original) async {
-    final editada = await _dialogoCategoria(
-      context,
-      titulo: 'Editar categoría',
-      categoriaInicial: original,
-    );
+  Future<void> _editarCategoria(Categoria original) async {
+    final editada =
+        await _dialogoCategoria(titulo: 'Editar categoría', categoriaInicial: original);
     if (!mounted || editada == null) return;
 
     final actualizada = Categoria(
@@ -222,18 +261,12 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
       fechaRegistro: original.fechaRegistro,
     );
 
-    final ok = await controller.actualizar(actualizada);
+    final ok = await _controller.actualizar(actualizada);
     if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Categoría actualizada' : 'No se pudo actualizar'),
-        backgroundColor: ok ? Colors.green : Colors.redAccent,
-      ),
-    );
+    _toast(ok ? 'Categoría actualizada' : 'No se pudo actualizar', ok);
   }
 
-  Future<void> _eliminarCategoria(BuildContext context, Categoria categoria) async {
+  Future<void> _eliminarCategoria(Categoria categoria) async {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
@@ -244,34 +277,25 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE74C3C)),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar'),
+            child: const Text('Eliminar', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
-
     if (confirmar != true || !mounted) return;
 
-    final ok = await controller.eliminar(categoria.categoriaId);
+    final ok = await _controller.eliminar(categoria.categoriaId);
     if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Categoría eliminada' : 'No se pudo eliminar'),
-        backgroundColor: ok ? Colors.green : Colors.redAccent,
-      ),
-    );
+    _toast(ok ? 'Categoría eliminada' : 'No se pudo eliminar', ok);
   }
 
-  Future<Categoria?> _dialogoCategoria(
-    BuildContext context, {
+  Future<Categoria?> _dialogoCategoria({
     required String titulo,
     Categoria? categoriaInicial,
   }) async {
     final nombreCtrl = TextEditingController(text: categoriaInicial?.nombreCategoria ?? '');
-    final descCtrl   = TextEditingController(text: categoriaInicial?.descripcion ?? '');
-    bool activo      = categoriaInicial?.activo ?? true;
-
+    final descCtrl = TextEditingController(text: categoriaInicial?.descripcion ?? '');
+    bool activo = categoriaInicial?.activo ?? true;
     final formKey = GlobalKey<FormState>();
 
     final result = await showDialog<Categoria?>(
@@ -283,7 +307,7 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
             content: Form(
               key: formKey,
               child: SizedBox(
-                width: 320,
+                width: 340,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -305,28 +329,26 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
                       minLines: 1,
                       maxLines: 3,
                     ),
-                    const SizedBox(height: 10),
                     SwitchListTile(
+                      dense: true,
                       title: const Text('Activo'),
                       value: activo,
                       onChanged: (v) => setStateDialog(() => activo = v),
+                      contentPadding: EdgeInsets.zero,
                     ),
                   ],
                 ),
               ),
             ),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, null),
-                child: const Text('Cancelar'),
-              ),
+              TextButton(onPressed: () => Navigator.pop(context, null), child: const Text('Cancelar')),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1565C0)),
                 onPressed: () {
                   if (!(formKey.currentState?.validate() ?? false)) return;
-
                   final now = DateTime.now();
                   final salida = Categoria(
-                    categoriaId: categoriaInicial?.categoriaId ?? 0, 
+                    categoriaId: categoriaInicial?.categoriaId ?? 0,
                     nombreCategoria: nombreCtrl.text.trim(),
                     descripcion: descCtrl.text.trim(),
                     activo: activo,
@@ -334,7 +356,7 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
                   );
                   Navigator.pop(context, salida);
                 },
-                child: const Text('Guardar'),
+                child: const Text('Guardar', style: TextStyle(color: Colors.white)),
               ),
             ],
           );
@@ -344,34 +366,58 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
 
     return result;
   }
+
+  void _toast(String msg, bool ok) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: ok ? Colors.green : Colors.redAccent),
+    );
+  }
+
+  Widget _kv(String k, String v) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            SizedBox(width: 90, child: Text(k, style: const TextStyle(color: Colors.black54))),
+            const Text(':  '),
+            Expanded(child: Text(v, maxLines: 2, overflow: TextOverflow.ellipsis)),
+          ],
+        ),
+      );
 }
 
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.onChanged});
+  const _SearchBar({required this.controller, required this.onChanged});
+  final TextEditingController controller;
   final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 50,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
-            offset: const Offset(0, 3),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: TextField(
-        decoration: const InputDecoration(
-          hintText: 'Buscar categoría...',
-          prefixIcon: Icon(Icons.search, color: Colors.grey),
-          border: InputBorder.none,
+      child: Center(
+        child: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            hintText: 'Buscar categoría...',
+            prefixIcon: Icon(Icons.search, color: Colors.grey),
+            border: InputBorder.none,
+          ),
+          style: const TextStyle(fontSize: 14),
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     );
   }
