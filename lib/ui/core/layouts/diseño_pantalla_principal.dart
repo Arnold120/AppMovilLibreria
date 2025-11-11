@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_build_context_synchronously
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:application_library/ui/core/routes/app_router.gr.dart';
@@ -22,7 +24,7 @@ class PantallaPrincipal extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async {
-              final confirmar = await showDialog(
+              final confirmar = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Cerrar Sesión'),
@@ -55,9 +57,8 @@ class PantallaPrincipal extends StatelessWidget {
                 await AuthService.logout();
 
                 if (context.mounted) {
-                  Navigator.pop(context);
-                  context.router.push(const PantallaInicioSesion());
-
+                  Navigator.pop(context); // cierra el loading
+                  context.router.push(const RouteInicioSesion());
                 }
               }
             },
@@ -110,80 +111,17 @@ class _SideBarMenu extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                
                 const SizedBox(height: 5),
               ],
             ),
           ),
 
-          ExpansionTile(
-            title: const Text('Productos', style: TextStyle(color: Colors.white)),
-            backgroundColor: const Color(0xFF2c3e50),
-            collapsedBackgroundColor: const Color(0xFF2c3e50),
-            textColor: Colors.white,
-            iconColor: Colors.white,
-            collapsedTextColor: Colors.white,
-            children: [
-              ListTile(
-                title: const Text('Listado', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                },
-                hoverColor: const Color(0xFF2c3e50),
-                tileColor: Colors.white,
-              ),
-              ListTile(
-                title: const Text('Agregar producto', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                },
-                hoverColor: const Color(0xFF2c3e50),
-                tileColor: Colors.white,
-              ),
-            ],
-          ),
-
-          ExpansionTile(
-            title: const Text('Categorías', style: TextStyle(color: Colors.white)),
-            backgroundColor: const Color(0xFF2c3e50),
-            collapsedBackgroundColor: const Color(0xFF2c3e50),
-            textColor: Colors.white,
-            iconColor: Colors.white,
-            collapsedTextColor: Colors.white,
-            children: [
-              ListTile(
-                title: const Text('Listado', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                  //AutoRouter.of(context).push(const RutaCategoriesPage());
-                },
-                hoverColor: const Color(0xFF2c3e50),
-                tileColor: Colors.white,
-              ),
-              ListTile(
-                title: const Text('Agregar categoría', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                  //AutoRouter.of(context).push(const RutaCategoriesPage());
-                },
-                hoverColor: const Color(0xFF2c3e50),
-                tileColor: Colors.white,
-              ),
-            ],
-          ),
-
-          ListTile(
-            title: const Text('Proveedores', style: TextStyle(color: Colors.white)),
-            onTap: () {
-            },
-            hoverColor: const Color(0xFF2c3e50),
-          ),
-          ListTile(
-            title: const Text('Clientes', style: TextStyle(color: Colors.white)),
-            onTap: () {
-            },
-            hoverColor: const Color(0xFF2c3e50),
-          ),
+          // Marcas
           ListTile(
             title: const Text('Marcas', style: TextStyle(color: Colors.white)),
             onTap: () {
-              //AutoRouter.of(context).push(const RutaBrandsPage());
+              Navigator.pop(context); // cerrar Drawer
+              context.router.push(const RouteMarca()); // ✅ usar RouteMarca
             },
             hoverColor: const Color(0xFF2c3e50),
           ),

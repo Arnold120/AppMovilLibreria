@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/solicitud_usuario_login.dart';
 
 class AuthService {
-  static const String _baseUrl = 'https://testerwebapplication.azurewebsites.net';
+  static const String _baseUrl = 'https://testeoxd.azurewebsites.net';
 
   static Map<String, dynamic>? usuarioActual;
 

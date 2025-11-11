@@ -1,16 +1,19 @@
-import 'package:application_library/ui/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:application_library/ui/core/routes/app_router.dart';
 
 void main() {
-  runApp(AplicacionPrincipal());
+  runApp(const AplicacionPrincipal());
 }
 
 class AplicacionPrincipal extends StatelessWidget {
-  final EnrutadorAplicacion _enrutador = EnrutadorAplicacion();
-  AplicacionPrincipal({super.key});
+  const AplicacionPrincipal({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: _enrutador.config());
+    final enrutador = AppRouter();
+    return MaterialApp.router(
+      routerConfig: enrutador.config(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }

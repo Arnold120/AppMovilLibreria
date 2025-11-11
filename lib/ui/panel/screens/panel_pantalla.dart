@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:application_library/ui/core/routes/app_router.gr.dart'; 
@@ -17,7 +19,7 @@ class _PantallaTableroState extends State<PantallaTablero> {
   int _selectedIndex = 0;
 
 final List<PageRouteInfo> _routes = const [ 
-  PantallaPerfil(),        
+  RoutePerfil(),        
 ];
 
   void _onItemTapped(int index) {
