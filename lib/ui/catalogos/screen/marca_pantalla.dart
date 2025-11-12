@@ -355,46 +355,51 @@ class _PantallaMarcaState extends State<PantallaMarca> {
               ),
               const SizedBox(height: 12),
               Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    dataRowHeight: 50,
-                    headingRowHeight: 50,
-                    columnSpacing: isMobile ? 16 : 24,
-                    headingRowColor: MaterialStateProperty.all(const Color(0xFF4A00E0)),
-                    headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    columns: isMobile
-                        ? const [DataColumn(label: Text('Nombre')), DataColumn(label: Text('Activo')), DataColumn(label: Text('Acciones'))]
-                        : const [DataColumn(label: Text('Nombre')), DataColumn(label: Text('Activo')), DataColumn(label: Text('Registro')), DataColumn(label: Text('Acciones'))],
-                    rows: List.generate(marcasFiltradas.length, (index) {
-                      final m = marcasFiltradas[index];
-                      final isEven = index % 2 == 0;
-                      return DataRow(
-                        color: MaterialStateProperty.resolveWith<Color?>((states) {
-                          if (states.contains(MaterialState.hovered)) return const Color(0xFFE8EAF6);
-                          return isEven ? Colors.white : const Color(0xFFF7F9FB);
+                child: SingleChildScrollView( // VERTICAL scroll
+                  child: SingleChildScrollView( // HORIZONTAL scroll
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                      child: DataTable(
+                        dataRowHeight: 50,
+                        headingRowHeight: 50,
+                        columnSpacing: isMobile ? 16 : 24,
+                        headingRowColor: MaterialStateProperty.all(const Color(0xFF4A00E0)),
+                        headingTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        columns: isMobile
+                            ? const [DataColumn(label: Text('Nombre')), DataColumn(label: Text('Activo')), DataColumn(label: Text('Acciones'))]
+                            : const [DataColumn(label: Text('Nombre')), DataColumn(label: Text('Activo')), DataColumn(label: Text('Registro')), DataColumn(label: Text('Acciones'))],
+                        rows: List.generate(marcasFiltradas.length, (index) {
+                          final m = marcasFiltradas[index];
+                          final isEven = index % 2 == 0;
+                          return DataRow(
+                            color: MaterialStateProperty.resolveWith<Color?>((states) {
+                              if (states.contains(MaterialState.hovered)) return const Color(0xFFE8EAF6);
+                              return isEven ? Colors.white : const Color(0xFFF7F9FB);
+                            }),
+                            onLongPress: () => _mostrarDetalleMarca(m),
+                            cells: isMobile
+                                ? [
+                                    DataCell(Text(m.nombreMarca.length > 18 ? '${m.nombreMarca.substring(0, 18)}...' : m.nombreMarca)),
+                                    DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
+                                    DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
+                                      IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
+                                      IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
+                                    ])),
+                                  ]
+                                : [
+                                    DataCell(Text(m.nombreMarca, overflow: TextOverflow.ellipsis)),
+                                    DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
+                                    DataCell(Text(m.fechaRegistro.toLocal().toString().split(' ')[0])),
+                                    DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
+                                      IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
+                                      IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
+                                    ])),
+                                  ],
+                          );
                         }),
-                        onLongPress: () => _mostrarDetalleMarca(m),
-                        cells: isMobile
-                            ? [
-                                DataCell(Text(m.nombreMarca.length > 18 ? '${m.nombreMarca.substring(0, 18)}...' : m.nombreMarca)),
-                                DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
-                                DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
-                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
-                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
-                                ])),
-                              ]
-                            : [
-                                DataCell(Text(m.nombreMarca, overflow: TextOverflow.ellipsis)),
-                                DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
-                                DataCell(Text(m.fechaRegistro.toLocal().toString().split(' ')[0])),
-                                DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
-                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
-                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
-                                ])),
-                              ],
-                      );
-                    }),
+                      ),
+                    ),
                   ),
                 ),
               ),
