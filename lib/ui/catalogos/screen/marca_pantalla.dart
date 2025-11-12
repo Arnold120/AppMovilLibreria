@@ -43,6 +43,9 @@ class _PantallaMarcaState extends State<PantallaMarca> {
     });
   }
 
+  // -----------------------
+  // CREAR
+  // -----------------------
   Future<void> _abrirDialogoCrearMarca() async {
     final formKey = GlobalKey<FormState>();
     String nombre = '';
@@ -79,20 +82,42 @@ class _PantallaMarcaState extends State<PantallaMarca> {
                   : () async {
                       if (!(formKey.currentState?.validate() ?? false)) return;
                       formKey.currentState!.save();
-                      final nueva = Marca(marcaId: 0, nombreMarca: nombre, activo: activo, fechaRegistro: DateTime.now());
+
+                      final nueva = Marca(
+                        marcaId: 0,
+                        nombreMarca: nombre,
+                        activo: activo,
+                        fechaRegistro: DateTime.now(),
+                      );
+
+                      // Ejecutar async fuera de setState
                       try {
-                        final ok = await _controller.crearMarca(nueva);
+                        final bool ok = await _controller.crearMarca(nueva);
+
                         if (!mounted) return;
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca creada' : 'No se pudo crear')));
-                        if (ok) setState(() => _marcasFuture = _controller.refrescar());
+                        Navigator.pop(context); // cerrar dialog
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(ok ? 'Marca creada' : 'No se pudo crear la marca')),
+                        );
+
+                        if (ok) {
+                          // Refrescar la lista: obtener future fuera de setState
+                          final refreshFuture = _controller.refrescar();
+                          if (!mounted) return;
+                          setState(() {
+                            _marcasFuture = refreshFuture;
+                          });
+                        }
                       } catch (e) {
                         if (!mounted) return;
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
                       }
                     },
-              child: _controller.operando ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Text('Guardar'),
+              child: _controller.operando
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Text('Guardar'),
             );
           }),
         ],
@@ -100,6 +125,9 @@ class _PantallaMarcaState extends State<PantallaMarca> {
     );
   }
 
+  // -----------------------
+  // EDITAR
+  // -----------------------
   Future<void> _abrirDialogoEditarMarca(Marca marca) async {
     final formKey = GlobalKey<FormState>();
     String nombre = marca.nombreMarca;
@@ -137,25 +165,42 @@ class _PantallaMarcaState extends State<PantallaMarca> {
                   : () async {
                       if (!(formKey.currentState?.validate() ?? false)) return;
                       formKey.currentState!.save();
+
                       final actualizado = Marca(
                         marcaId: marca.marcaId,
                         nombreMarca: nombre,
                         activo: activo,
                         fechaRegistro: marca.fechaRegistro,
                       );
+
+                      // Ejecutar async fuera de setState
                       try {
-                        final ok = await _controller.actualizarMarca(actualizado);
+                        final bool ok = await _controller.actualizarMarca(actualizado);
+
                         if (!mounted) return;
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca actualizada' : 'No se pudo actualizar')));
-                        if (ok) setState(() => _marcasFuture = _controller.refrescar());
+                        Navigator.pop(context); // cerrar dialog
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(ok ? 'Marca actualizada' : 'No se pudo actualizar')),
+                        );
+
+                        if (ok) {
+                          // Refrescar la lista: obtener future fuera de setState
+                          final refreshFuture = _controller.refrescar();
+                          if (!mounted) return;
+                          setState(() {
+                            _marcasFuture = refreshFuture;
+                          });
+                        }
                       } catch (e) {
                         if (!mounted) return;
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar: ${e.toString()}')));
                       }
                     },
-              child: _controller.operando ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Text('Guardar'),
+              child: _controller.operando
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : const Text('Guardar'),
             );
           }),
         ],
@@ -163,6 +208,9 @@ class _PantallaMarcaState extends State<PantallaMarca> {
     );
   }
 
+  // -----------------------
+  // ELIMINAR
+  // -----------------------
   Future<void> _confirmarEliminarMarca(Marca marca) async {
     final confirmar = await showDialog<bool>(
       context: context,
@@ -180,19 +228,35 @@ class _PantallaMarcaState extends State<PantallaMarca> {
       ),
     );
 
-    if (confirmar == true) {
-      try {
-        final ok = await _controller.eliminarMarca(marca.marcaId);
+    if (confirmar != true) return;
+
+    try {
+      // Ejecutar async fuera de setState
+      final bool ok = await _controller.eliminarMarca(marca.marcaId);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(ok ? 'Marca eliminada' : 'No se pudo eliminar la marca')),
+      );
+
+      if (ok) {
+        // Refrescar la lista: obtener future fuera de setState
+        final refreshFuture = _controller.refrescar();
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca eliminada' : 'No se pudo eliminar')));
-        if (ok) setState(() => _marcasFuture = _controller.refrescar());
-      } catch (e) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        setState(() {
+          _marcasFuture = refreshFuture;
+        });
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al eliminar: ${e.toString()}')));
     }
   }
 
+  // -----------------------
+  // DETALLE
+  // -----------------------
   void _mostrarDetalleMarca(Marca marca) {
     showDialog(
       context: context,
@@ -236,6 +300,9 @@ class _PantallaMarcaState extends State<PantallaMarca> {
     );
   }
 
+  // -----------------------
+  // BUILD
+  // -----------------------
   @override
   Widget build(BuildContext context) {
     final bool isMobile = MediaQuery.of(context).size.width < 430;
@@ -255,14 +322,17 @@ class _PantallaMarcaState extends State<PantallaMarca> {
           if (snapshot.connectionState == ConnectionState.waiting && _controller.marcas.isEmpty) {
             return const Center(child: CircularProgressIndicator(color: Color(0xFF4A00E0)));
           }
+
           if (snapshot.hasError) {
             final err = snapshot.error.toString();
             return Center(child: Text('Error al cargar marcas: $err', style: const TextStyle(color: Colors.redAccent)));
           }
+
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No hay marcas registradas.', style: TextStyle(color: Colors.grey)));
           }
 
+          // sincronizar controller si viene vacío
           if (_controller.marcas.isEmpty) {
             _controller.marcas = snapshot.data!;
             _controller.marcasFiltradas = List.from(_controller.marcas);
@@ -277,7 +347,10 @@ class _PantallaMarcaState extends State<PantallaMarca> {
                 height: 50,
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
                 child: Center(
-                  child: TextField(decoration: const InputDecoration(hintText: 'Buscar marca...', prefixIcon: Icon(Icons.search, color: Colors.grey), border: InputBorder.none), onChanged: _onBuscar),
+                  child: TextField(
+                    decoration: const InputDecoration(hintText: 'Buscar marca...', prefixIcon: Icon(Icons.search, color: Colors.grey), border: InputBorder.none),
+                    onChanged: _onBuscar,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
