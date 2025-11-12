@@ -8,9 +8,9 @@ class MarcaController {
   List<Marca> marcas = [];
   List<Marca> marcasFiltradas = [];
 
-  bool cargando = false;   // para la carga inicial
-  bool operando = false;   // para operaciones CUD (crear/editar/eliminar)
-  String? error;           // último error si lo querés mostrar
+  bool cargando = false;
+  bool operando = false;
+  String? error;
 
   Future<List<Marca>> cargarMarcas() async {
     cargando = true;
@@ -39,7 +39,6 @@ class MarcaController {
       marcasFiltradas = List.from(marcas);
       return;
     }
-    // si no hay marcas cargadas, devolvemos vacío
     if (marcas.isEmpty) {
       marcasFiltradas = [];
       return;
@@ -51,9 +50,7 @@ class MarcaController {
     operando = true;
     try {
       final ok = await _marcaService.crearMarca(m);
-      if (ok) {
-        await refrescar();
-      }
+      if (ok) await refrescar();
       return ok;
     } catch (e) {
       rethrow;
@@ -62,5 +59,29 @@ class MarcaController {
     }
   }
 
-  // agregar actualizar/eliminar si se requiere igual que crearMarca
+  Future<bool> actualizarMarca(Marca m) async {
+    operando = true;
+    try {
+      final ok = await _marcaService.actualizarMarca(m);
+      if (ok) await refrescar();
+      return ok;
+    } catch (e) {
+      rethrow;
+    } finally {
+      operando = false;
+    }
+  }
+
+  Future<bool> eliminarMarca(int id) async {
+    operando = true;
+    try {
+      final ok = await _marcaService.eliminarMarca(id);
+      if (ok) await refrescar();
+      return ok;
+    } catch (e) {
+      rethrow;
+    } finally {
+      operando = false;
+    }
+  }
 }

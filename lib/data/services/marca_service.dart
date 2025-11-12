@@ -62,14 +62,12 @@ class MarcaService {
       final body = jsonEncode({
         'NombreMarca': marca.nombreMarca,
         'Activo': marca.activo,
-        // normalmente el backend setea FechaRegistro; mandamos por si lo espera:
         'FechaRegistro': marca.fechaRegistro.toIso8601String(),
       });
       final response = await http.post(url, headers: _getHeaders(), body: body).timeout(const Duration(seconds: 12));
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       } else {
-        // intentar obtener mensaje del servidor
         String msg = '';
         try {
           final j = jsonDecode(response.body);
@@ -84,7 +82,53 @@ class MarcaService {
     }
   }
 
-  // (Opcional) implementar actualizar/eliminar si tu API los soporta:
-  // Future<bool> actualizarMarca(Marca marca) async { ... }
-  // Future<bool> eliminarMarca(int id) async { ... }
+  Future<bool> actualizarMarca(Marca marca) async {
+    final url = Uri.parse('$_baseUrl/api/Marca/${marca.marcaId}');
+    try {
+      final body = jsonEncode({
+        'Marca_ID': marca.marcaId,
+        'NombreMarca': marca.nombreMarca,
+        'Activo': marca.activo,
+        'FechaRegistro': marca.fechaRegistro.toIso8601String(),
+      });
+      final response = await http.put(url, headers: _getHeaders(), body: body).timeout(const Duration(seconds: 12));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return true;
+      } else {
+        String msg = '';
+        try {
+          final j = jsonDecode(response.body);
+          msg = j['message'] ?? j['error'] ?? '';
+        } catch (_) {}
+        throw Exception('No se pudo actualizar marca: ${response.statusCode} ${msg}');
+      }
+    } on TimeoutException {
+      throw Exception('Tiempo de espera agotado al actualizar la marca.');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> eliminarMarca(int id) async {
+    final url = Uri.parse('$_baseUrl/api/Marca/$id');
+    try {
+      final response = await http.delete(url, headers: _getHeaders()).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return true;
+      } else if (response.statusCode == 404) {
+        return false;
+      } else {
+        String msg = '';
+        try {
+          final j = jsonDecode(response.body);
+          msg = j['message'] ?? j['error'] ?? '';
+        } catch (_) {}
+        throw Exception('No se pudo eliminar marca: ${response.statusCode} ${msg}');
+      }
+    } on TimeoutException {
+      throw Exception('Tiempo de espera agotado al eliminar la marca.');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

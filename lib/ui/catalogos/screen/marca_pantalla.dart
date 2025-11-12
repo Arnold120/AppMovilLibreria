@@ -33,9 +33,7 @@ class _PantallaMarcaState extends State<PantallaMarca> {
   }
 
   void _onBuscar(String query) {
-    // si aún se está cargando, ignorar el input momentáneamente
     if (_controller.cargando) return;
-
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if (!mounted) return;
@@ -56,60 +54,143 @@ class _PantallaMarcaState extends State<PantallaMarca> {
         title: const Text('Nueva Marca'),
         content: Form(
           key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Nombre de la marca'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
-                onSaved: (v) => nombre = v!.trim(),
-              ),
-              const SizedBox(height: 8),
-              SwitchListTile(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Nombre de la marca'),
+              validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+              onSaved: (v) => nombre = v!.trim(),
+            ),
+            const SizedBox(height: 8),
+            StatefulBuilder(builder: (c, setC) {
+              return SwitchListTile(
                 title: const Text('Activo'),
                 value: activo,
-                onChanged: (v) { activo = v; },
-              ),
-            ],
-          ),
+                onChanged: (v) => setC(() => activo = v),
+              );
+            }),
+          ]),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
           StatefulBuilder(builder: (c, setC) {
             return ElevatedButton(
-              onPressed: _controller.operando ? null : () async {
-                if (!(formKey.currentState?.validate() ?? false)) return;
-                formKey.currentState!.save();
-                // crear payload
-                final nueva = Marca(
-                  marcaId: 0,
-                  nombreMarca: nombre,
-                  activo: activo,
-                  fechaRegistro: DateTime.now(),
-                );
-                try {
-                  setState(() {}); // actualiza estado visual si needed
-                  final ok = await _controller.crearMarca(nueva);
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(ok ? 'Marca creada' : 'No se pudo crear la marca')),
-                  );
-                  if (ok) {
-                    setState(() { _marcasFuture = _controller.refrescar(); });
-                  }
-                } catch (e) {
-                  if (!mounted) return;
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
-                }
-              },
-              child: _controller.operando ? const SizedBox(width:16, height:16, child:CircularProgressIndicator(strokeWidth:2, color: Colors.white)) : const Text('Guardar'),
+              onPressed: _controller.operando
+                  ? null
+                  : () async {
+                      if (!(formKey.currentState?.validate() ?? false)) return;
+                      formKey.currentState!.save();
+                      final nueva = Marca(marcaId: 0, nombreMarca: nombre, activo: activo, fechaRegistro: DateTime.now());
+                      try {
+                        final ok = await _controller.crearMarca(nueva);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca creada' : 'No se pudo crear')));
+                        if (ok) setState(() => _marcasFuture = _controller.refrescar());
+                      } catch (e) {
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+                      }
+                    },
+              child: _controller.operando ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Text('Guardar'),
             );
           }),
         ],
       ),
     );
+  }
+
+  Future<void> _abrirDialogoEditarMarca(Marca marca) async {
+    final formKey = GlobalKey<FormState>();
+    String nombre = marca.nombreMarca;
+    bool activo = marca.activo;
+
+    await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar Marca'),
+        content: Form(
+          key: formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TextFormField(
+              initialValue: nombre,
+              decoration: const InputDecoration(labelText: 'Nombre de la marca'),
+              validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+              onSaved: (v) => nombre = v!.trim(),
+            ),
+            const SizedBox(height: 8),
+            StatefulBuilder(builder: (c, setC) {
+              return SwitchListTile(
+                title: const Text('Activo'),
+                value: activo,
+                onChanged: (v) => setC(() => activo = v),
+              );
+            }),
+          ]),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          StatefulBuilder(builder: (c, setC) {
+            return ElevatedButton(
+              onPressed: _controller.operando
+                  ? null
+                  : () async {
+                      if (!(formKey.currentState?.validate() ?? false)) return;
+                      formKey.currentState!.save();
+                      final actualizado = Marca(
+                        marcaId: marca.marcaId,
+                        nombreMarca: nombre,
+                        activo: activo,
+                        fechaRegistro: marca.fechaRegistro,
+                      );
+                      try {
+                        final ok = await _controller.actualizarMarca(actualizado);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca actualizada' : 'No se pudo actualizar')));
+                        if (ok) setState(() => _marcasFuture = _controller.refrescar());
+                      } catch (e) {
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+                      }
+                    },
+              child: _controller.operando ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Text('Guardar'),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmarEliminarMarca(Marca marca) async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar eliminación'),
+        content: Text('¿Eliminar la marca "${marca.nombreMarca}"? Esta acción no se puede deshacer.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFe74c3c)),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar == true) {
+      try {
+        final ok = await _controller.eliminarMarca(marca.marcaId);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ok ? 'Marca eliminada' : 'No se pudo eliminar')));
+        if (ok) setState(() => _marcasFuture = _controller.refrescar());
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+      }
+    }
   }
 
   void _mostrarDetalleMarca(Marca marca) {
@@ -123,19 +204,16 @@ class _PantallaMarcaState extends State<PantallaMarca> {
         child: Container(
           padding: const EdgeInsets.all(16),
           constraints: const BoxConstraints(maxWidth: 380, maxHeight: 420),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(marca.nombreMarca, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 12),
-              Divider(color: Colors.grey[300]),
-              const SizedBox(height: 12),
-              _buildInfoRow("Activo", marca.activo ? "Sí" : "No", marca.activo ? Icons.check_circle : Icons.cancel),
-              _buildInfoRow("Registro", marca.fechaRegistro.toLocal().toString().split(' ')[0], Icons.calendar_today),
-              const SizedBox(height: 12),
-              Align(alignment: Alignment.centerRight, child: ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text('Cerrar'))),
-            ],
-          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(marca.nombreMarca, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Divider(color: Colors.grey[300]),
+            const SizedBox(height: 12),
+            _buildInfoRow("Activo", marca.activo ? "Sí" : "No", marca.activo ? Icons.check_circle : Icons.cancel),
+            _buildInfoRow("Registro", marca.fechaRegistro.toLocal().toString().split(' ')[0], Icons.calendar_today),
+            const SizedBox(height: 12),
+            Align(alignment: Alignment.centerRight, child: ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text('Cerrar'))),
+          ]),
         ),
       ),
     );
@@ -167,11 +245,7 @@ class _PantallaMarcaState extends State<PantallaMarca> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)]),
-          ),
-        ),
+        flexibleSpace: Container(decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)]))),
         title: const Text('Gestión de Marcas', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: Colors.white), onPressed: () => AutoRouter.of(context).pop()),
       ),
@@ -181,17 +255,14 @@ class _PantallaMarcaState extends State<PantallaMarca> {
           if (snapshot.connectionState == ConnectionState.waiting && _controller.marcas.isEmpty) {
             return const Center(child: CircularProgressIndicator(color: Color(0xFF4A00E0)));
           }
-
           if (snapshot.hasError) {
             final err = snapshot.error.toString();
             return Center(child: Text('Error al cargar marcas: $err', style: const TextStyle(color: Colors.redAccent)));
           }
-
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No hay marcas registradas.', style: TextStyle(color: Colors.grey)));
           }
 
-          // Sincronizar controlador en caso de que venga vacío
           if (_controller.marcas.isEmpty) {
             _controller.marcas = snapshot.data!;
             _controller.marcasFiltradas = List.from(_controller.marcas);
@@ -202,20 +273,14 @@ class _PantallaMarcaState extends State<PantallaMarca> {
           return Padding(
             padding: const EdgeInsets.all(12),
             child: Column(children: [
-              // Buscador
               Container(
                 height: 50,
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
                 child: Center(
-                  child: TextField(
-                    decoration: const InputDecoration(hintText: 'Buscar marca...', prefixIcon: Icon(Icons.search, color: Colors.grey), border: InputBorder.none),
-                    onChanged: _onBuscar,
-                  ),
+                  child: TextField(decoration: const InputDecoration(hintText: 'Buscar marca...', prefixIcon: Icon(Icons.search, color: Colors.grey), border: InputBorder.none), onChanged: _onBuscar),
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Tabla responsive
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -242,8 +307,8 @@ class _PantallaMarcaState extends State<PantallaMarca> {
                                 DataCell(Text(m.nombreMarca.length > 18 ? '${m.nombreMarca.substring(0, 18)}...' : m.nombreMarca)),
                                 DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
                                 DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
-                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () {}),
-                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () {}),
+                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
+                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
                                 ])),
                               ]
                             : [
@@ -251,8 +316,8 @@ class _PantallaMarcaState extends State<PantallaMarca> {
                                 DataCell(Icon(m.activo ? Icons.check_circle : Icons.cancel, color: m.activo ? Colors.green : Colors.redAccent)),
                                 DataCell(Text(m.fechaRegistro.toLocal().toString().split(' ')[0])),
                                 DataCell(Row(mainAxisSize: MainAxisSize.min, children: [
-                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () {}),
-                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () {}),
+                                  IconButton(icon: const Icon(Icons.edit, size: 18, color: Color(0xFF6C63FF)), onPressed: () => _abrirDialogoEditarMarca(m)),
+                                  IconButton(icon: const Icon(Icons.delete, size: 18, color: Color(0xFFE74C3C)), onPressed: () => _confirmarEliminarMarca(m)),
                                 ])),
                               ],
                       );
