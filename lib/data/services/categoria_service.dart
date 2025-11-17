@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/categoria_model.dart';
 import 'autenticacion_servicio_login.dart';
+import 'package:application_library/core/utils/environment.dart';
 
 class CategoriaService {
-  final String _baseUrl = 'https://testeoxd.azurewebsites.net';
+  final String _baseUrl = Environment.instance.apiBaseUrl;
 
   Map<String, String> _getHeaders() {
     final headers = {'Content-Type': 'application/json'};

@@ -2,8 +2,10 @@ import 'package:application_library/ui/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:application_library/ui/catalogos/logic/categoria_controller.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async{
+  await dotenv.load(fileName: ".env");
   runApp(AplicacionPrincipal());
 }
 
