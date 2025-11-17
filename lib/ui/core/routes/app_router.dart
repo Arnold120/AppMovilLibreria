@@ -5,6 +5,7 @@ import 'package:application_library/ui/core/layouts/diseño_pantalla_principal.d
 import 'package:application_library/ui/panel/screens/panel_pantalla.dart';
 import 'package:application_library/ui/perfil/screens/perfil_pantalla.dart';
 import 'package:application_library/ui/catalogos/screen/categoria_pantalla.dart';
+import 'package:application_library/ui/catalogos/screen/venta_pantalla.dart';
 
 import './app_router.gr.dart';
 
@@ -22,6 +23,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RouteTablero.page, path: PantallaTablero.nombreRuta, initial: true),
         AutoRoute(page: RoutePerfil.page, path: PantallaPerfil.nombreRuta),
         AutoRoute(page: CategoriaRoute.page, path: CategoriaPantalla.nombreRuta),
+        AutoRoute(page: VentaRoute.page, path: VentaPantalla.nombreRuta),
       ],
     ),
   ];

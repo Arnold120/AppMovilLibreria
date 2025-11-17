@@ -44,8 +44,7 @@ class CategoriaController extends ChangeNotifier {
     _applyFilter();
     notifyListeners();
   }
-
-  
+ 
 Future<bool> actualizar(Categoria categoria) async {
   final ok = await service.actualizarCategoria(categoria);
   if (ok) {
@@ -54,15 +53,20 @@ Future<bool> actualizar(Categoria categoria) async {
   return ok;
 }
 
-
 Future<bool> eliminar(int id) async {
-  final ok = await service.eliminarCategoria(id);
-  if (ok) {
-    await load();
+  try {
+    final ok = await service.eliminarCategoria(id);
+    if (ok) {
+      _items.removeWhere((c) => c.categoriaId == id);
+      _applyFilter();
+      notifyListeners();
+    }
+    return ok;
+  } catch (e) {
+    debugPrint('Error al eliminar categoría: $e');
+    return false;
   }
-  return ok;
 }
-
 
   Future<bool> crear(Categoria categoria) async {
     final ok = await service.crearCategoria(categoria);

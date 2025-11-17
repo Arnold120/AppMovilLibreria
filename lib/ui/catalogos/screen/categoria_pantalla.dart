@@ -266,28 +266,49 @@ class _CategoriaPantallaState extends State<CategoriaPantalla> {
     _toast(ok ? 'Categoría actualizada' : 'No se pudo actualizar', ok);
   }
 
-  Future<void> _eliminarCategoria(Categoria categoria) async {
-    final confirmar = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Eliminar categoría'),
-        content: Text('¿Seguro que deseas eliminar "${categoria.nombreCategoria}"?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE74C3C)),
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-    if (confirmar != true || !mounted) return;
+Future<void> _eliminarCategoria(Categoria categoria) async {
+  bool? shouldDelete;
+  
+  await showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Eliminar categoría'),
+      content: Text('¿Seguro que deseas eliminar "${categoria.nombreCategoria}"?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            shouldDelete = false;
+            Navigator.of(dialogContext).pop();
+          },
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE74C3C)),
+          onPressed: () {
+            shouldDelete = true;
+            Navigator.of(dialogContext).pop();
+          },
+          child: const Text('Eliminar', style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    ),
+  );
 
+  if (shouldDelete != true) return;
+  await Future.delayed(const Duration(milliseconds: 50));
+  if (!mounted) return;
+  try {
     final ok = await _controller.eliminar(categoria.categoriaId);
-    if (!mounted) return;
-    _toast(ok ? 'Categoría eliminada' : 'No se pudo eliminar', ok);
+    if (mounted) {
+      _toast(ok ? 'Categoría eliminada' : 'No se pudo eliminar', ok);
+    }
+  } catch (e) {
+    if (mounted) {
+      _toast('Error al eliminar: $e', false);
+    }
   }
+}
 
   Future<Categoria?> _dialogoCategoria({
     required String titulo,
