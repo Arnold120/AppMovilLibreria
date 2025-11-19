@@ -1,0 +1,26 @@
+import 'package:application_library/ui/core/routes/app_router.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:application_library/ui/catalogos/logic/proveedor_controller.dart';
+
+void main() {
+  runApp(AplicacionPrincipal());
+}
+
+class AplicacionPrincipal extends StatelessWidget {
+  final AppRouter _enrutador = AppRouter();
+  AplicacionPrincipal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProveedorController()),
+      ],
+      child: MaterialApp.router(
+        routerConfig: _enrutador.config(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}
