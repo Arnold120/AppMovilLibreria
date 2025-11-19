@@ -260,11 +260,17 @@ packages:
     source: sdk
     version: "0.0.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   frontend_server_client:
@@ -436,6 +442,8 @@ packages:
     source: hosted
     version: "2.0.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   nested:
     dependency: transitive
     description:
@@ -444,6 +452,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   package_config:
@@ -462,6 +474,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
   path_provider_linux:
     dependency: transitive
@@ -489,6 +503,10 @@ packages:
     version: "2.3.0"
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   petitparser:
     dependency: transitive
     description:
@@ -497,6 +515,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
   platform:
     dependency: transitive
@@ -516,6 +536,10 @@ packages:
     version: "2.1.8"
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   pool:
     dependency: transitive
     description:
@@ -533,6 +557,8 @@ packages:
     source: hosted
     version: "6.0.3"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   provider:
     dependency: "direct main"
     description:
@@ -541,6 +567,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.5+1"
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   pub_semver:
@@ -559,6 +589,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
   shared_preferences:
     dependency: "direct dev"
@@ -616,6 +648,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   shelf:
@@ -760,6 +796,8 @@ packages:
     source: hosted
     version: "3.0.3"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   xdg_directories:
     dependency: transitive
     description:
@@ -768,6 +806,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
   xml:
@@ -797,7 +839,15 @@ packages:
 sdks:
   dart: ">=3.9.0 <4.0.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   flutter: ">=3.35.0"
+=======
+  flutter: ">=3.18.0-18.0.pre.54"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+  flutter: ">=3.18.0-18.0.pre.54"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
   flutter: ">=3.18.0-18.0.pre.54"
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a

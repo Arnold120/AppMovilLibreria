@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:application_library/ui/authentication/screens/pantalla_usuario.dart';
 import 'package:application_library/ui/authentication/screens/pantalla_registro.dart';
 import 'package:application_library/ui/core/layouts/diseño_pantalla_principal.dart';
@@ -30,6 +32,10 @@ class AppRouter extends RootStackRouter {
   ];
 }
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 import './app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|View,Route')
@@ -62,4 +68,10 @@ class EnrutadorAplicacion extends RootStackRouter {
     ),
   ];
 }
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a

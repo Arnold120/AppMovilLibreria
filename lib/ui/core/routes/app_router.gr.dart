@@ -11,6 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:application_library/ui/authentication/screens/pantalla_registro.dart'
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     as _i6;
 import 'package:application_library/ui/authentication/screens/pantalla_usuario.dart'
     as _i1;
@@ -36,6 +38,10 @@ class RouteInicioSesion extends _i8.PageRouteInfo<void> {
 
   static _i8.PageInfo page = _i8.PageInfo(
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     as _i3;
 import 'package:application_library/ui/authentication/screens/pantalla_usuario.dart'
     as _i1;
@@ -56,6 +62,12 @@ class PantallaInicioSesion extends _i6.PageRouteInfo<void> {
   static const String name = 'PantallaInicioSesion';
 
   static _i6.PageInfo page = _i6.PageInfo(
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     name,
     builder: (data) {
@@ -65,6 +77,8 @@ class PantallaInicioSesion extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
 /// [_i2.PantallaPerfil]
 class RoutePerfil extends _i8.PageRouteInfo<void> {
@@ -78,6 +92,10 @@ class RoutePerfil extends _i8.PageRouteInfo<void> {
     builder: (data) {
       return const _i2.PantallaPerfil();
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 /// [_i2.PantallaPrincipal]
 class PantallaPrincipal extends _i6.PageRouteInfo<void> {
   const PantallaPrincipal({List<_i6.PageRouteInfo>? children})
@@ -89,12 +107,20 @@ class PantallaPrincipal extends _i6.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i2.PantallaPrincipal();
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     },
   );
 }
 
 /// generated route for
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
 /// [_i3.PantallaPrincipal]
 class RoutePrincipal extends _i8.PageRouteInfo<void> {
@@ -108,6 +134,10 @@ class RoutePrincipal extends _i8.PageRouteInfo<void> {
     builder: (data) {
       return const _i3.PantallaPrincipal();
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 /// [_i3.PantallaRegistro]
 class PantallaRegistro extends _i6.PageRouteInfo<void> {
   const PantallaRegistro({List<_i6.PageRouteInfo>? children})
@@ -119,12 +149,20 @@ class PantallaRegistro extends _i6.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i3.PantallaRegistro();
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     },
   );
 }
 
 /// generated route for
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
 /// [_i4.PantallaProducto]
 class RouteProducto extends _i8.PageRouteInfo<void> {
@@ -138,6 +176,10 @@ class RouteProducto extends _i8.PageRouteInfo<void> {
     builder: (data) {
       return const _i4.PantallaProducto();
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 /// [_i4.PantallaTablero]
 class PantallaTablero extends _i6.PageRouteInfo<void> {
   const PantallaTablero({List<_i6.PageRouteInfo>? children})
@@ -149,12 +191,20 @@ class PantallaTablero extends _i6.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i4.PantallaTablero();
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     },
   );
 }
 
 /// generated route for
+<<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD
 /// [_i5.PantallaProveedor]
 class RouteProveedor extends _i8.PageRouteInfo<void> {
@@ -200,6 +250,10 @@ class RouteTablero extends _i8.PageRouteInfo<void> {
     builder: (data) {
       return const _i7.PantallaTablero();
 =======
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 /// [_i5.PerfilPantalla]
 class PantallaPerfil extends _i6.PageRouteInfo<void> {
   const PantallaPerfil({List<_i6.PageRouteInfo>? children})
@@ -211,6 +265,12 @@ class PantallaPerfil extends _i6.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i5.PerfilPantalla();
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
     },
   );

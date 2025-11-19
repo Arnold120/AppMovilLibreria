@@ -6,10 +6,20 @@ import FlutterMacOS
 import Foundation
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 import shared_preferences_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
+=======
+
+func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+
+func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

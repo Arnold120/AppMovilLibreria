@@ -1,6 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use
 
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 import 'package:auto_route/auto_route.dart';
@@ -23,7 +29,15 @@ class _PantallaTableroState extends State<PantallaTablero> {
 
 final List<PageRouteInfo> _routes = const [ 
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   RoutePerfil(),        
+=======
+  PantallaPerfil(),        
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+  PantallaPerfil(),        
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
   PantallaPerfil(),        
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a

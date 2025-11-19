@@ -1,7 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
         android:label="Libreria: EL Estudiante"
+=======
+        android:label="application_library"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+        android:label="application_library"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
         android:label="application_library"
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a

@@ -15,7 +15,13 @@ dependencies:
   http: ^1.1.2
   intl: ^0.18.1
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   provider: ^6.1.2
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 
@@ -29,7 +35,13 @@ dev_dependencies:
   build_runner: ^2.5.4
   flutter_launcher_icons: ^0.13.1
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   shared_preferences: ^2.2.2
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 
@@ -40,7 +52,15 @@ flutter_icons:
   android: true
   ios: true
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   image_path: "assets/fonts/icono de libreria.png"
+=======
+  image_path: "assets/fonts/Logo de la libreria el estudiante.png"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
+=======
+  image_path: "assets/fonts/Logo de la libreria el estudiante.png"
+>>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
 =======
   image_path: "assets/fonts/Logo de la libreria el estudiante.png"
 >>>>>>> 59d6b5f641ef69c037a952d57e694c74cd42942a
