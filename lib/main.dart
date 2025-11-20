@@ -1,3 +1,4 @@
+import 'package:application_library/ui/catalogos/logic/perfil_controller.dart';
 import 'package:application_library/ui/core/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ class AplicacionPrincipal extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => PerfilController()),
         ChangeNotifierProvider(create: (_) => ProveedorController()),
       ],
       child: MaterialApp.router(

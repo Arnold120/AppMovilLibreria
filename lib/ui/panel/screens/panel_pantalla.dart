@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:application_library/ui/core/routes/app_router.gr.dart'; 
@@ -18,8 +16,10 @@ class PantallaTablero extends StatefulWidget {
 class _PantallaTableroState extends State<PantallaTablero> {
   int _selectedIndex = 0;
 
-final List<PageRouteInfo> _routes = const [ 
-  RoutePerfil(),        
+final List<PageRouteInfo> _routes = [ 
+  const RoutePrincipal(),
+  const RouteAdminUsuarios(),
+  const RouteCompra(),
 ];
 
   void _onItemTapped(int index) {
@@ -44,7 +44,7 @@ final List<PageRouteInfo> _routes = const [
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 5,
                     offset: const Offset(0, 3),
                   )

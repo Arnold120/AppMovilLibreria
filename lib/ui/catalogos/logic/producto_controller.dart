@@ -12,7 +12,7 @@ class ProductoController {
     productosFiltrados = List.from(productos);
     return productos;
   }
-
+  
   void filtrarProductos(String query) {
     if (query.isEmpty) {
       productosFiltrados = List.from(productos);
