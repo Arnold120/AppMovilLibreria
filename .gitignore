@@ -49,6 +49,7 @@ app.*.map.json
 *.gr.dart
 *.g.dart
 *.freezed.dart
+app_router.gr.dart
 
 *.env
 .fake
