@@ -457,13 +457,22 @@ class _SideBarMenuState extends State<_SideBarMenu> {
               Navigator.pop(context);
               context.router.push(const RouteProducto());
             }),
-            _buildSubMenuTile('Marcas', Icons.label_outlined, () {}),
-            _buildSubMenuTile('Categorías', Icons.category_outlined, () {}),
+            _buildSubMenuTile('Marcas', Icons.label_outlined, () {
+              Navigator.pop(context);
+              context.router.push(const RouteMarca());
+            }),
+            _buildSubMenuTile('Categorías', Icons.category_outlined, () {
+              Navigator.pop(context);
+              context.router.push(const RouteCategoria());
+            }),
             _buildSubMenuTile('Proveedores', Icons.local_shipping_outlined, () {
               Navigator.pop(context);
               context.router.push(const RouteProveedor());
             }),
-            _buildSubMenuTile('Clientes', Icons.people_outlined, () {}),
+            _buildSubMenuTile('Clientes', Icons.people_outlined, () {
+              Navigator.pop(context);
+              context.router.push(const RouteCliente());
+            }),
           ],
         ),
         _buildExpandableMenu(

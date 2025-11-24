@@ -4,14 +4,15 @@ import 'package:application_library/data/models/cliente_model.dart';
 import 'package:application_library/data/services/cliente_service.dart';
 
 @RoutePage()
-class ClientePantalla extends StatefulWidget {
-  const ClientePantalla({super.key});
+class PantallaCliente extends StatefulWidget {
+  static const String nombreRuta = 'clientes';
+  const PantallaCliente({super.key});
 
   @override
-  State<ClientePantalla> createState() => _ClientePantallaState();
+  State<PantallaCliente> createState() => _PantallaClienteState();
 }
 
-class _ClientePantallaState extends State<ClientePantalla> {
+class _PantallaClienteState extends State<PantallaCliente> {
   final ClienteService _clienteService = ClienteService();
   late Future<List<Cliente>> _clientes;
   List<Cliente> _clientesFiltrados = [];

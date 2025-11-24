@@ -4,14 +4,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:application_library/data/services/categoria_service.dart';
 
 @RoutePage()
-class CategoriaPantalla extends StatefulWidget {
-  const CategoriaPantalla({super.key});
+class PantallaCategoria extends StatefulWidget {
+  static const String nombreRuta = 'categorias';
+  const PantallaCategoria({super.key});
 
   @override
-  State<CategoriaPantalla> createState() => _CategoriaPantallaState();
+  State<PantallaCategoria> createState() => _PantallaCategoriaState();
 }
 
-class _CategoriaPantallaState extends State<CategoriaPantalla> {
+class _PantallaCategoriaState extends State<PantallaCategoria> {
   final CategoriaService _categoriaService = CategoriaService();
   late Future<List<Categoria>> _categorias;
   List<Categoria> _categoriasFiltradas = [];

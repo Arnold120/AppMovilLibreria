@@ -4,14 +4,15 @@ import 'package:application_library/data/models/marca_model.dart';
 import 'package:application_library/data/services/marca_service.dart';
 
 @RoutePage()
-class MarcaPantalla extends StatefulWidget {
-  const MarcaPantalla({super.key});
+class PantallaMarca extends StatefulWidget {
+  static const String nombreRuta = 'marcas';
+  const PantallaMarca({super.key});
 
   @override
-  State<MarcaPantalla> createState() => _MarcaPantallaState();
+  State<PantallaMarca> createState() => _PantallaMarcaState();
 }
 
-class _MarcaPantallaState extends State<MarcaPantalla> {
+class _PantallaMarcaState extends State<PantallaMarca> {
   final MarcaService _marcaService = MarcaService();
   late Future<List<Marca>> _marcas;
   List<Marca> _marcasFiltradas = [];

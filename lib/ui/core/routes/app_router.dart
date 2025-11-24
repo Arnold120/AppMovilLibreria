@@ -1,4 +1,7 @@
+import 'package:application_library/ui/catalogos/screen/categoria_pantalla.dart';
+import 'package:application_library/ui/catalogos/screen/cliente_pantalla.dart';
 import 'package:application_library/ui/catalogos/screen/compra_pantalla.dart';
+import 'package:application_library/ui/catalogos/screen/marca_pantalla.dart';
 import 'package:application_library/ui/catalogos/screen/venta_pantalla.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:application_library/ui/authentication/screens/pantalla_usuario.dart';
@@ -30,6 +33,9 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RouteAdminUsuarios.page, path: PantallaAdminUsuarios.nombreRuta),
         AutoRoute(page: RouteCompra.page, path: PantallaCompra.nombreRuta),
         AutoRoute(page: RouteVenta.page, path: PantallaVenta.nombreRuta),
+        AutoRoute(page: RouteCategoria.page, path: PantallaCategoria.nombreRuta),
+        AutoRoute(page: RouteMarca.page, path: PantallaMarca.nombreRuta),
+        AutoRoute(page: RouteCliente.page, path: PantallaCliente.nombreRuta),
       ],
     ),
   ];
