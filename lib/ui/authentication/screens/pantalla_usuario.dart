@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:application_library/ui/authentication/logic/validaciones_login.dart';
@@ -35,7 +37,7 @@ class _EstadoPantallaInicioSesion extends State<PantallaInicioSesion> {
 
         if (resultado['success'] == true) {
           if (context.mounted) {
-            AutoRouter.of(context).push(const PantallaPrincipal());
+            AutoRouter.of(context).push(const RoutePrincipal());
           }
         } else {
           if (context.mounted) {
@@ -65,7 +67,7 @@ class _EstadoPantallaInicioSesion extends State<PantallaInicioSesion> {
         children: [
           SizedBox.expand(
             child: Image.network(
-              'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrU2yRTGfbWv3hoXJkihrcsPG7pIQ96gGjInKja55pGmn_L0PH63PEF1yqIpx70xWuQzlz-2elch1vyGP2UQpt3cDT8H5mPoHsUWN8SYNq08IHjASLePhwHJDVc62kgT9WTnz3X=w408-h306-k-no',
+              'https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzdW0wkw_MyJgM6YSteaJkafg6LiQ69zcIiReNuNcOlT_TpSbg8x-Sv1--iEAx3Ijv-7uXQ0Z0R0BdqavyPGa_w5lZhvjKYlQU0_c4Vz8ccK9y3CWuHYBrKen5uaSE4luNMWO_Q=w408-h306-k-no',
               fit: BoxFit.cover,
             ),
           ),
@@ -203,7 +205,7 @@ class _EstadoPantallaInicioSesion extends State<PantallaInicioSesion> {
                                 onTap: _isLoading
                                     ? null
                                     : () {
-                                        AutoRouter.of(context).push(const PantallaRegistro());
+                                        AutoRouter.of(context).push(const RouteRegistro());
                                       },
                                 child: Text(
                                   'Regístrate',
